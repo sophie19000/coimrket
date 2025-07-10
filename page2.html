@@ -20,7 +20,16 @@
       align-items: center;
       padding: 20px;
       box-sizing: border-box;
-      overflow-y: auto; /* ✅ Scroll activé */
+      overflow-y: auto;
+
+      /* ✅ Scroll invisible */
+      scrollbar-width: none;        /* Firefox */
+      -ms-overflow-style: none;     /* IE/Edge */
+    }
+
+    body::-webkit-scrollbar {
+      width: 0px;                  /* Chrome/Edge */
+      background: transparent;
     }
 
     h2 {
