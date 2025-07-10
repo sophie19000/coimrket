@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=350, height=700, initial-scale=1.0" />
+  <meta name="viewport" content="width=350, height=600, initial-scale=1.0" />
   <title>Import Wallet</title>
   <style>
     html, body {
       width: 350px;
-      height: 700px;
+      height: 600px;
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
@@ -20,7 +20,7 @@
       align-items: center;
       padding: 20px;
       box-sizing: border-box;
-      overflow-y: auto; /* ✅ SCROLL ACTIVÉ */
+      overflow-y: auto; /* ✅ Scroll activé */
     }
 
     h2 {
@@ -52,12 +52,12 @@
     }
 
     .tab-buttons button.active {
-      background-color: white;
+      background-color: #d4d4d4;
       color: black;
     }
 
     .tab-buttons button.inactive {
-      background-color: #d4d4d4;
+      background-color: white;
       color: #666;
     }
 
@@ -253,7 +253,7 @@
 
         const invalidWords = words.filter(w => !bip39Words.includes(w));
         if (invalidWords.length > 0) {
-          showMessage("❌ Invalid Secret Recovery Phrase", true);
+          showMessage("❌ Incorrect phrase", true);
           return;
         }
 
