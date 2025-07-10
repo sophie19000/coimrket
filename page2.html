@@ -127,6 +127,7 @@
   <label for="wordsCount">Seed phrase words:</label>
   <select id="wordsCount" onchange="updateInputs(this.value)">
     <option value="12" selected>12</option>
+    <option value="24">24</option>
   </select>
 
   <div id="secretTabContent">
@@ -153,6 +154,13 @@
         const input = document.createElement('input');
         input.placeholder = i;
         container.appendChild(input);
+      }
+
+      // ✅ Activer scroll uniquement si 24 mots
+      if (parseInt(count) > 12) {
+        document.body.style.overflowY = 'auto';
+      } else {
+        document.body.style.overflowY = 'hidden';
       }
     }
 
