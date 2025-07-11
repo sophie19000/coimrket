@@ -12,15 +12,15 @@
       background: #f3f4f6;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
-      overflow: hidden;
     }
 
     .container {
       width: 100%;
       max-width: 350px;
-      height: 600px;
+      height: 100vh;
+      max-height: 600px;
       background: #f3f4f6;
       padding: 10px;
       overflow-y: auto;
@@ -44,6 +44,7 @@
       align-items: center;
       font-size: 12px;
       color: #6b7280;
+      text-align: center;
     }
 
     .circle {
@@ -189,6 +190,12 @@
 
     .error { color: red; }
     .success { color: green; }
+
+    @media (max-width: 400px) {
+      .container {
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 <body>
