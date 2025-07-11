@@ -22,12 +22,61 @@
       max-width: 100%;
     }
 
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 20px;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .circle {
+      width: 30px;
+      height: 30px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 5px;
+      background: white;
+    }
+
+    .circle.active {
+      border-color: #3b82f6;
+      color: #3b82f6;
+    }
+
+    .line {
+      flex-grow: 1;
+      height: 2px;
+      background-color: #cbd5e1;
+      margin: 0 10px;
+    }
+
     h2 {
       text-align: center;
       font-size: 18px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       color: #111827;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 15px;
+      font-style: italic;
     }
 
     .tab-buttons {
@@ -110,7 +159,7 @@
       width: 80%;
       padding: 10px;
       font-size: 14px;
-      background-color: #111827;
+      background-color: #3b82f6;
       color: white;
       border: none;
       border-radius: 25px;
@@ -119,7 +168,7 @@
     }
 
     .confirm-btn:hover {
-      background-color: #1f2937;
+      background-color: #2563eb;
     }
 
     .message {
@@ -134,7 +183,23 @@
   </style>
 </head>
 <body>
+
+  <!-- Étapes du haut -->
+  <div class="step-indicator">
+    <div class="step">
+      <div class="circle active">1</div>
+      <span>Confirm secret recovery phrase</span>
+    </div>
+    <div class="line"></div>
+    <div class="step">
+      <div class="circle">2</div>
+      <span>Create password</span>
+    </div>
+  </div>
+
   <h2>Importing Wallet</h2>
+  <p class="subtitle">Securely restore your wallet using your recovery phrase or private key</p>
+
   <div class="tab-buttons">
     <button id="secretTab" class="active" onclick="showTab('secret')">Secret phrase</button>
     <button id="privateTab" class="inactive" onclick="showTab('private')">Private key</button>
